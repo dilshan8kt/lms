@@ -1,5 +1,5 @@
 # lms
 
-This is an open source project that was built and maintained at ColorCloud (pvt) Ltd.
+This is an open source project that was built and maintained at ColorAdmin (pvt) Ltd.
 
 TODO
