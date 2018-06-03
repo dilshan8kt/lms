@@ -20,14 +20,26 @@
             <p>Total registerd employees</p>
           </div>
         </div>
-        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
-          <div class="tile-stats">
-            <div class="icon"><i class="fa fa-comments-o"></i></div>
-            <div class="count">{{$leave}}</div>
-            <h3>Arrived Requests</h3>
-            <p>Employee leave requests</p>
+
+
+          <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="tile-stats">
+              <div class="icon"><i class="fa fa-comments-o"></i></div>
+              <div class="count">{{$leave}}</div>
+              <h3>
+                @if($leave > 0)
+                <a href="{{Route('leave')}}">
+                  Arrived Requests
+                </a>
+                @else
+                  Arrived Requests
+                @endif
+              </h3>
+              <p>Employee leave requests</p>
+            </div>
           </div>
-        </div>
+
+          
         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
           <div class="tile-stats">
             <div class="icon"><i class="fa fa-check-square-o"></i></div>

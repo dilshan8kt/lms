@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\LeaveCategory;
+use Mail;
+use App\Mail\LeaveStatusMail;
 use App\Leave;
 use Carbon\Carbon;
 use App\User;
@@ -39,35 +41,73 @@ class LeaveController extends Controller
 
     public function applyleave(Request $request){
         $split = explode(" - ", $request->daterange);
-
+        
         $leavestart = Carbon::parse($split[0]);
         $leaveend = Carbon::parse($split[1]);
 
         $validdate = Carbon::now()->addMonths(3);
         $nowdate = Carbon::now()->subMonths(1);
-        // dd($validdate);
+        
         if($leavestart > $validdate || $leaveend > $validdate)
-            //  dd('error');
-             return redirect()->back()->with('error1','You only can apply leave 3 months forword');
+            return redirect()->back()->with('error','You only can apply leave 3 months forword');
         
         if($leavestart < $nowdate || $leaveend < $nowdate)
-            return redirect()->back()->with('error2','You only can apply leave 1 month before');
+            return redirect()->back()->with('error','You only can apply leave 1 month before');
 
-        // dd('success');
         
         $days = $leaveend->diffInDays($leavestart) + 1;
 
-        $leave = new Leave();
-        $leave->emp_id = Auth::user()->id;
-        $leave->emp_name = Auth::user()->first_name;
-        $leave->leave_start = $leavestart;
-        $leave->leave_end = $leaveend;
-        $leave->days = $days;
-        $leave->leave_type = $request->input('ltype');
-        $leave->reason = $request->input('reason');
+        $lbemployee = DB::table('leaves')
+            ->select(DB::raw('SUM(days) as total'))
+            ->whereBetween('leave_start', [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])
+            ->where([
+                ['status', '=', 1],
+                ['leave_type', '=', $request->ltype],
+                ['emp_id', '=', Auth::user()->id]
+            ])
+        ->get()
+        ->first();
 
-        $leave->save();
-        return redirect()->back()->with('apply-leave','Leave Apply Successfully!!');
+        $lcategoryday = DB::table('leave_categories')
+            ->select('days')
+            ->where('name', '=', $request->ltype)
+            ->get()
+            ->first();
+
+        //dd($lcategoryday);
+        if($lbemployee->total === null){
+            if($days <= $lcategoryday->days){
+                $leave = new Leave();
+                $leave->emp_id = Auth::user()->id;
+                $leave->emp_name = Auth::user()->first_name;
+                $leave->leave_start = $leavestart;
+                $leave->leave_end = $leaveend;
+                $leave->days = $days;
+                $leave->leave_type = $request->input('ltype');
+                $leave->reason = $request->input('reason');
+        
+                $leave->save();
+                return redirect()->back()->with('apply-leave','Leave Apply Successfully!!');
+            }else{
+                return redirect()->back()->with('error','Your leave balance is exceed to get more leave,Only remaining ('.$lcategoryday->days.')'.$request->ltype.' leaves in month  Please check your leave balance');
+            }
+        }else{
+            if(($lcategoryday->days - $lbemployee->total) >= $days){
+                $leave = new Leave();
+                $leave->emp_id = Auth::user()->id;
+                $leave->emp_name = Auth::user()->first_name;
+                $leave->leave_start = $leavestart;
+                $leave->leave_end = $leaveend;
+                $leave->days = $days;
+                $leave->leave_type = $request->input('ltype');
+                $leave->reason = $request->input('reason');
+        
+                $leave->save();
+                return redirect()->back()->with('apply-leave','Leave Apply Successfully!!');
+            }else{
+                return redirect()->back()->with('error','Your leave balance is exceed to get more leave, Only remaining ('.($lcategoryday->days - $lbemployee->total).')'.$request->ltype.' leaves in month  Please check your leave balance');
+            }
+        }
     }
 
     public function leave(){
@@ -81,6 +121,10 @@ class LeaveController extends Controller
         $leave->status = 2;
         $leave->approved_by = Auth::user()->first_name;
         $leave->update();
+
+        $user = User::findOrFail($leave->emp_id);
+        Mail::to($user->email)->send(new LeaveStatusMail($leave));
+
         return redirect('leave')->with('rejected','Leave Rejected!!');
     }
 
@@ -89,6 +133,10 @@ class LeaveController extends Controller
         $leave->status = 1;
         $leave->approved_by = Auth::user()->first_name;
         $leave->update();
+
+        $user = User::findOrFail($leave->emp_id);
+        Mail::to($user->email)->send(new LeaveStatusMail($leave));
+
         return redirect('leave')->with('accepted','Leave Accepted!!');
     }
 
@@ -146,12 +194,15 @@ class LeaveController extends Controller
             ->with('leave', $leave);
     }
 
-
     public function rejectedpost(Request $request){
         $leave = Leave::findOrFail($request->input('id'));
         $leave->status = 2;
         $leave->approved_by = Auth::user()->first_name;
         $leave->update();
+
+        $user = User::findOrFail($leave->emp_id);
+        Mail::to($user->email)->send(new LeaveStatusMail($leave));
+
         return redirect('leave')->with('rejected','Leave Rejected!!');
     }
 
@@ -160,6 +211,11 @@ class LeaveController extends Controller
         $leave->status = 1;
         $leave->approved_by = Auth::user()->first_name;
         $leave->update();
+
+        $user = User::findOrFail($leave->emp_id);
+        
+        Mail::to($user->email)->send(new LeaveStatusMail($leave));
+
         return redirect('leave')->with('accepted','Leave Accepted!!');
     }
 

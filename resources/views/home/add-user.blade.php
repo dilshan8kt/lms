@@ -8,6 +8,17 @@
   <div class="right_col" role="main">
     <!-- page content -->
     <div class="">
+
+      @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+      @endif
+
       <div class="page-title">
         <div class="clearfix"></div>
 
@@ -22,7 +33,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                <form class="form-horizontal form-label-left" method="POST" action="{{Route('add-user')}}" novalidate>
+                <form class="form-horizontal form-label-left" method="POST" action="{{Route('add-user')}}" enctype="multipart/form-data" novalidate>
                   {{csrf_field()}}
                   <div class="item form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Employee No <span class="required">*</span>
@@ -50,7 +61,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Telephone <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="tel" id="telephone" name="phone" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+                      <input type="tel" id="telephone" name="phone" required="required" data-validate-length-range="10,10" class="form-control col-md-7 col-xs-12" numeric>
                     </div>
                   </div>
 
@@ -74,6 +85,13 @@
                     <label for="password" class="control-label col-md-3">Password</label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <input id="password" type="password" name="password" data-validate-length="6,8" class="form-control col-md-7 col-xs-12" required="required">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3">Image :</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input class="form-control" type="file" id="image" name="image" placeholder="User Image"/>
                     </div>
                   </div>
 

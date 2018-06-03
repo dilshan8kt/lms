@@ -8,7 +8,7 @@
 @endsection
 
 @section('body')
-  <!-- page content -->
+  {{--  <!-- page content -->  --}}
   <div class="right_col" role="main">
     <div class="">
         
@@ -51,7 +51,7 @@
                 <div id="mainb" style="height:20px;"></div>
                 <div>
                   <h4>Notifications !</h4>
-                  <!-- end of user messages -->
+                  {{--  <!-- end of user messages -->  --}}
                   <ul class="messages">
                     @foreach($notice as $noti)
                     <li>
@@ -68,18 +68,30 @@
                     </li>
                     @endforeach
                   </ul>
-                  <!-- end of user messages -->
+                  {{--  <!-- end of user messages -->  --}}
                 </div>
               </div> 
               <div class="col-md-3">
                 <br>
                 <div class="x_title">
-                  <h2>System Description</h2>
+                  <h2>Apply Leave Status</h2>
                   <div class="clearfix"></div>
                 </div>
 
                 <div class="panel-body">
-                  <h3 class="green"><i class="fa fa-paint-brush"></i> LMS</h3>
+                  @foreach($leavestatus as $ls)
+                    @if($ls->status === 1)
+                      <div class="alert alert-success">
+                        <strong>Approved!</strong> Leave request <br/>({{ $ls->days }} day - {{ $ls->leave_start }} to {{ $ls->leave_end }}) approved by {{ $ls->approved_by }}
+                      </div>
+                    @else
+                      <div class="alert alert-danger">
+                        <strong>Rejected!</strong> Leave request <br/>({{ $ls->days }} day - {{ $ls->leave_start }} to {{ $ls->leave_end }}) rejected by {{ $ls->approved_by }}
+                      </div>
+                    @endif
+                  @endforeach
+
+                  {{--  <h3 class="green"><i class="fa fa-paint-brush"></i> LMS</h3>
                   <p>Here have showed your entitled leave balance.also from the Leave sevtion you can easily apply for a leave and waiting for the approval.</p>
                   <br />
                   <div class="project_detail">
@@ -87,7 +99,7 @@
                     <p>Deveint Inc</p>
                     <p class="title">Reporting Manager</p>
                      <label>Tony Chicken<label>
-                  </div>
+                  </div>  --}}
                   <br><br>
                 </div>
               </div> 

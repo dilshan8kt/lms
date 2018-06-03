@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
 use App\User;
 use App\Role;
 
@@ -24,7 +27,7 @@ class UserController extends Controller
     }
 
     public function addnewuser(Request $request){
-        // return $request;
+
         $role_admin = Role::where('name', 'Admin')->first();
         $role_employee = Role::where('name', 'Employee')->first();
 
@@ -42,6 +45,14 @@ class UserController extends Controller
             $user->roles()->attach($role_admin);
         }
         $user->roles()->attach($role_employee);
+
+        //store user image to laravel storage
+        $file = $request->file('image');        
+        $filename = $request['empno'] . '-' . $request['fname'] . '.jpg';
+
+        if($file){
+            Storage::disk('local')->put($filename, File::get($file));
+        }
 
         return redirect('view-user')->with('new-user','User Registerd Successfully');
     }
@@ -70,6 +81,21 @@ class UserController extends Controller
             $user->roles()->attach(Role::where('name', 'Admin')->first());
         }
         $user->roles()->attach(Role::where('name', 'Employee')->first());
+
+
+         //store user image to laravel storage
+         $file = $request->file('image');        
+         $filename = $request['empno'] . '-' . $request['fname'] . '.jpg';
+ 
+         if($file){
+             Storage::disk('local')->put($filename, File::get($file));
+         }
+         
         return redirect('view-user')->with('update-user','User Update Successfully');
+    }
+
+    public function getUserImage($filename){
+        $file = Storage::disk('local')->get($filename);
+        return new Response($file, 200);
     }
 }

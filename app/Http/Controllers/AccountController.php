@@ -23,7 +23,7 @@ class AccountController extends Controller
             }
             return redirect()->route('index-employee');
         }
-        return redirect()->back()->with('message','Login Error');
+        return redirect()->back()->with('message','Login Error, Invalid Credentials');
     }
 
     public function signout(){

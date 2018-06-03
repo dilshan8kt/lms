@@ -39,23 +39,26 @@ class HomeController extends Controller
                 ['status', '=', 1],
                 ['emp_id', '=', Auth::user()->id]
             ])
-            // ->count()
-            // ->where([
-            //     ['status', '=', 1],
-            //     ['leave_type', '=', 'casual'],
-            //     ['emp_id', '=', Auth::user()->id]
-            // ]);
             ->groupBy('leave_type')
             ->get();
-        // return $lbemployee;
-        // dd($lbemployee);
 
+
+        $leavestatus = DB::table('leaves')
+                ->whereBetween('leave_start', [Carbon::now(), Carbon::now()->addMonth(3)])
+                ->where([
+                    ['status', '>', 0],
+                    ['emp_id', '=', Auth::user()->id]
+                ])
+                ->orderby('leave_start', 'desc')
+                ->get();
+        // dd($leavestatus);
+       
         $notice = DB::table('notices')->latest()->get();
         return view('home.employee-dashboard')
             ->with('user',$user)
             ->with('notice', $notice)
             ->with('leavebalance',$leavebalance)
             ->with('lbemployee', $lbemployee)
-            ;
+            ->with('leavestatus', $leavestatus);
     }
 }

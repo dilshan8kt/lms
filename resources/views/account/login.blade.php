@@ -8,19 +8,24 @@
 
         <title>LMS | Login</title>
 
-        <!-- Bootstrap -->
-        <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font Awesome -->
-        <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <!-- NProgress -->
-        <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
-        <!-- Animate.css -->
-        <link href="/vendors/animate.css/animate.min.css" rel="stylesheet">
-        <!-- Custom Theme Style -->
-        <link href="/build/css/custom.min.css" rel="stylesheet">
+        {{--  Bootstrap  --}}
+        <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+        {{--  Font Awesome  --}}
+        <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
+        {{--  NProgress  --}}
+        <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
+        {{--  Animate.css  --}}
+        <link href="{{ asset('vendors/animate.css/animate.min.css') }}" rel="stylesheet">
+        {{--  Custom Theme Style  --}}
+        <link href="{{ asset('build/css/custom.min.css') }}" rel="stylesheet">
     </head>
 
     <body class="login">
+        @if(session()->has('message'))
+            <div class="alert alert-danger">
+                {{ session()->get('message') }}
+            </div>
+        @endif
         <div class="login_wrapper">
             <div class="animate form login_form">
                 <section class="login_content">
@@ -51,7 +56,7 @@
                         </div>
                     </form>
                 </section>
-                </div>
+            </div>
         </div>
     </body>
 </html>

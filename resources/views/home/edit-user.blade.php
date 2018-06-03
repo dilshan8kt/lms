@@ -21,7 +21,7 @@
                 <div class="clearfix"></div>
               </div>
               <div class="x_content">
-                <form class="form-horizontal form-label-left" method="POST" action="{{Route('edit-user')}}" novalidate>
+                <form class="form-horizontal form-label-left" method="POST" action="{{Route('edit-user')}}" novalidate enctype="multipart/form-data">
                   <input type="hidden" name="id" value="{{ $user->id }}">
                   {{csrf_field()}}
                   <div class="item form-group">
@@ -50,7 +50,7 @@
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telephone">Telephone <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="tel" id="telephone" name="phone" value="{{ $user->telephone_no }}" required="required" data-validate-length-range="8,20" class="form-control col-md-7 col-xs-12">
+                      <input type="tel" id="telephone" name="phone" value="{{ $user->telephone_no }}" required="required" data-validate-length-range="8,10" class="form-control col-md-7 col-xs-12">
                     </div>
                   </div>
 
@@ -67,6 +67,13 @@
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <input id="uname" class="form-control col-md-7 col-xs-12" value="{{ $user->username }}" data-validate-length-range="10" name="uname" placeholder="username.." required="required" type="text">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3">Image :</label>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input class="form-control" type="file" id="image" name="image" placeholder="User Image"/>
                     </div>
                   </div>
 

@@ -34,7 +34,7 @@ class UserTableSeeder extends Seeder
         $employee->middle_name = 'Tharika';
         $employee->last_name = 'Liyanage';
         $employee->telephone_no = '0779422201';
-        $employee->email = 'dhani@gmail.com';
+        $employee->email = 'dhanishitharika1@gmail.com';
         $employee->username = 'dhani@gmail.com';
         $employee->password = bcrypt('12345');
         $employee->save();

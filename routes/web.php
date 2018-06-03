@@ -12,7 +12,7 @@
 */
 
 
-Route::redirect('','signin',301);
+Route::redirect('','login',301);
 
 Route::get('login', [
     'uses' => 'AccountController@login',
@@ -271,4 +271,12 @@ Route::get('view-leave-details/{id}',[
     'uses' => 'LeaveController@empLeaveDetails',
     'middleware' => 'roles',
     'roles' => ['Admin']
+]);
+
+
+Route::get('userimage/{filename}',[
+    'uses' => 'UserController@getUserImage',
+    'as' => 'image',
+    'middleware' => 'roles',
+    'roles' => ['Admin','Employee']
 ]);

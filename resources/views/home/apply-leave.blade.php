@@ -18,6 +18,13 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
+                    @if(session()->has('error'))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                        </div>
+                    @endif
+
+
                     <form class="form-horizontal form-label-left" method="POST" action="{{Route('apply-leave')}}" novalidate>
                         {{csrf_field()}}
                         <div class="item form-group">

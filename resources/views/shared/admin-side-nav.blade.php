@@ -6,9 +6,13 @@
  
  <!-- menu profile quick info -->
  <div class="profile clearfix">
-    <div class="profile_pic">
-        <img src="/images/img.jpg" alt="..." class="img-circle profile_img">
-    </div>
+
+    @if(Storage::disk('local')->has(Auth::user()->emp_code . '-' . Auth::user()->first_name . '.jpg'))  
+        <div class="profile_pic">
+            <img class="img-circle profile_img" src="{{ route('image', ['filename' => Auth::user()->emp_code . '-' . Auth::user()->first_name . '.jpg']) }}" alt=""/>
+        </div>
+    @endif
+
     <div class="profile_info">
         <span>Welcome,</span>
         {{--  {{ $user->hasRole('Admin') ? 'Admin':'Employee' }}  --}}
