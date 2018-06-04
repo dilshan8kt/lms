@@ -50,7 +50,7 @@
                       <input id="fname" class="form-control col-md-2 col-xs-12" data-validate-length-range="50" name="fname" placeholder="first name" required="required" type="text">
                     </div>
                     <div class="col-md-2 col-sm-6 col-xs-12">
-                      <input id="mname" class="form-control col-md-2 col-xs-12" data-validate-length-range="50" name="mname" placeholder="middle name" required="required" type="text">
+                      <input id="mname" class="form-control col-md-2 col-xs-12" data-validate-length-range="50" name="mname" placeholder="middle name" type="text">
                     </div>
                     <div class="col-md-2 col-sm-6 col-xs-12">
                       <input id="lname" class="form-control col-md-2 col-xs-12" data-validate-length-range="50" name="lname" placeholder="last name" type="text">

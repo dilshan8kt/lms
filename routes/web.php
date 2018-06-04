@@ -54,7 +54,7 @@ Route::get('edit-user', [
     'uses' => 'UserController@edituser',
     'as' => 'edituser',
     'middleware' => 'roles',
-    'roles' => ['Admin']
+    'roles' => ['Admin','Employee']
 ]);
 
 Route::get('view-user', [
@@ -88,6 +88,11 @@ Route::post('edit-user',[
     'as' => 'edit-user',
     'middleware' => 'roles',
     'roles' => ['Admin']
+]);
+
+Route::post('edit-profile',[
+    'uses' => 'UserController@updateProfile',
+    'as' => 'edit-profile'
 ]);
 
 Route::get('leave-category',[
@@ -277,6 +282,13 @@ Route::get('view-leave-details/{id}',[
 Route::get('userimage/{filename}',[
     'uses' => 'UserController@getUserImage',
     'as' => 'image',
+    'middleware' => 'roles',
+    'roles' => ['Admin','Employee']
+]);
+
+Route::get('profile',[
+    'uses' => 'UserController@getProfile',
+    'as' => 'profile',
     'middleware' => 'roles',
     'roles' => ['Admin','Employee']
 ]);

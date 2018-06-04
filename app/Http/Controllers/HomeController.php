@@ -44,7 +44,7 @@ class HomeController extends Controller
 
 
         $leavestatus = DB::table('leaves')
-                ->whereBetween('leave_start', [Carbon::now(), Carbon::now()->addMonth(3)])
+                ->whereBetween('leave_start', [Carbon::now()->subDay(), Carbon::now()->addMonth(3)])
                 ->where([
                     ['status', '>', 0],
                     ['emp_id', '=', Auth::user()->id]

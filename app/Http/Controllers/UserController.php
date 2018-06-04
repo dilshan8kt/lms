@@ -64,6 +64,30 @@ class UserController extends Controller
         return redirect('view-user')->with('delete-user','Delete Successfully');
     }
 
+
+    public function updateProfile(Request $request){
+        $user = User::findOrFail($request->input('id'));
+        $user->emp_code = $request->input('empno');
+        $user->first_name = $request->input('fname');
+        $user->middle_name = $request->input('mname');
+        $user->last_name = $request->input('lname');
+        $user->telephone_no = $request->input('phone');
+        $user->email = $request->input('email');
+        $user->username = $request->input('uname');
+        $user->update();
+
+         //store user image to laravel storage
+         $file = $request->file('image');        
+         $filename = $request['empno'] . '-' . $request['fname'] . '.jpg';
+ 
+         if($file){
+             Storage::disk('local')->put($filename, File::get($file));
+         }
+         
+        return redirect()->back()->with('update-profile','User Update Successfully');
+    }
+
+
     public function updateUser(Request $request){
 
         $user = User::findOrFail($request->input('id'));
@@ -97,5 +121,11 @@ class UserController extends Controller
     public function getUserImage($filename){
         $file = Storage::disk('local')->get($filename);
         return new Response($file, 200);
+    }
+
+    public function getProfile(){
+        $user = User::findOrFail(Auth::user()->id);
+        return view('home.profile')
+            ->with('user',$user);
     }
 }

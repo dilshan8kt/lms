@@ -46,13 +46,13 @@ class LeaveController extends Controller
         $leaveend = Carbon::parse($split[1]);
 
         $validdate = Carbon::now()->addMonths(3);
-        $nowdate = Carbon::now()->subMonths(1);
+        $nowdate = Carbon::now();
         
         if($leavestart > $validdate || $leaveend > $validdate)
             return redirect()->back()->with('error','You only can apply leave 3 months forword');
         
         if($leavestart < $nowdate || $leaveend < $nowdate)
-            return redirect()->back()->with('error','You only can apply leave 1 month before');
+            return redirect()->back()->with('error','You only can not apply leave before date');
 
         
         $days = $leaveend->diffInDays($leavestart) + 1;
