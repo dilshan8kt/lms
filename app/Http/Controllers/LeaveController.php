@@ -135,7 +135,7 @@ class LeaveController extends Controller
         $leave->update();
 
         $user = User::findOrFail($leave->emp_id);
-        Mail::to($user->email)->send(new LeaveStatusMail($leave));
+        // Mail::to($user->email)->send(new LeaveStatusMail($leave));
 
         return redirect('leave')->with('accepted','Leave Accepted!!');
     }
