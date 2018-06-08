@@ -125,7 +125,13 @@ class UserController extends Controller
 
     public function getProfile(){
         $user = User::findOrFail(Auth::user()->id);
-        return view('home.profile')
-            ->with('user',$user);
+        if(Auth::user()->hasRole('Admin')){
+            return view('home.profile')
+                ->with('user',$user);
+        }else{
+            return view('home.profile-emp')
+                ->with('user',$user);
+        }
+       
     }
 }
