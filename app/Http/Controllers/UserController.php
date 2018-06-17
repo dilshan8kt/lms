@@ -10,6 +10,9 @@ use Illuminate\Http\Response;
 use App\User;
 use App\Role;
 
+//report
+use PdfReport;
+
 class UserController extends Controller
 {
     public function adduser(){
@@ -133,5 +136,33 @@ class UserController extends Controller
                 ->with('user',$user);
         }
        
+    }
+
+    public function report(){
+        // Report title
+        $title = 'Registered User Report';
+
+        // For displaying filters description on header
+        $meta = [
+            'Registered on To ',
+            'Sort By'
+        ];
+
+        // Do some querying..
+        $queryBuilder = User::select(['emp_code', 'first_name', 'middle_name', 'last_name'])
+        ->orderBy('emp_code');
+
+
+        // Set Column to be displayed
+        $columns = [
+            'EMP Code' => 'emp_code',
+            'First Name' => 'first_name',
+            'Middle Name' => 'middle_name',
+            'Last Name' => 'last_name'
+        ];
+
+        return PdfReport::of($title, $meta, $queryBuilder, $columns)
+            ->limit(20)
+            ->stream(); // or download('filename here..') to download pdf
     }
 }

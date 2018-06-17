@@ -292,3 +292,8 @@ Route::get('profile',[
     'middleware' => 'roles',
     'roles' => ['Admin','Employee']
 ]);
+
+Route::get('report',[
+    'uses' => 'UserController@report',
+    'as' => 'report'
+]);
