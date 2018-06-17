@@ -1,6 +1,6 @@
 @extends('shared.employee-layout')
 @section('title')
-  Employee
+  Employees
 @endsection
 
 @section('active')
