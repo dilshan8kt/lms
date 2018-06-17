@@ -20,6 +20,7 @@
           <ul class="dropdown-menu dropdown-usermenu pull-right">
             <li><a href="{{Route('profile')}}"><i class="fa fa-profile pull-right"></i> Profile</a></li>
             <li><a href="{{Route('signout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+            <li><a href="{{Route('signout')}}"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
           </ul>
         </li>
 
