@@ -61,4 +61,10 @@ class HomeController extends Controller
             ->with('lbemployee', $lbemployee)
             ->with('leavestatus', $leavestatus);
     }
+	
+	public function ad(){
+		dd("Success");
+	}
+	
+	
 }
